@@ -12,6 +12,7 @@ export const MoviePoster = ({movie}: Props) => {
     <View
       style={{
         width: 300,
+        alignSelf: 'center',
         height: 420,
       }}>
       <View style={styles.imageContainer}>
