@@ -1,23 +1,17 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-} from 'react-native';
+import {View, ActivityIndicator, Dimensions, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Carousel from 'react-native-reanimated-carousel';
 
 import {MoviePoster} from '../components/MoviePoster';
 import {useMovies} from '../hooks/useMovies';
-import {interpolate} from 'react-native-reanimated';
+import {HorizontalSlider} from '../components/HorizontalSlider';
 
 const {width, height} = Dimensions.get('window');
 
 export const HomeScreen = () => {
-  const {peliculasEnCine, isLoading} = useMovies();
+  const {isLoading, nowPlaying, popular, topPated, upcoming} = useMovies();
   const {top} = useSafeAreaInsets();
 
   if (isLoading) {
@@ -28,46 +22,42 @@ export const HomeScreen = () => {
     );
   }
   return (
-    <View style={{marginTop: top}}>
-      <View
-        style={{
-          flex: 1,
-          height: 440,
-          alignItems: 'center',
-        }}>
-        {/* Carruse principal */}
-        <Carousel
-          autoPlayInterval={3000}
+    <ScrollView>
+      <View style={{marginTop: top}}>
+        <View
           style={{
-            backgroundColor: 'violet',
-          }}
-          mode="parallax"
-          modeConfig={{
-            parallaxScrollingScale: 0.9,
-            parallaxScrollingOffset: 145,
-          }}
-          autoPlay
-          data={peliculasEnCine}
-          renderItem={({item}) => <MoviePoster movie={item} />}
-          width={width}
-          height={height}
-        />
-      </View>
+            flex: 1,
+            height: 440,
+            alignItems: 'center',
+          }}>
+          {/* Carruse principal */}
+          <Carousel
+            autoPlayInterval={3000}
+            style={
+              {
+                // backgroundColor: 'violet',
+              }
+            }
+            mode="parallax"
+            modeConfig={{
+              parallaxScrollingScale: 0.9,
+              parallaxScrollingOffset: 145,
+            }}
+            autoPlay
+            data={nowPlaying}
+            renderItem={({item}) => (
+              <MoviePoster movie={item} posicion="center" />
+            )}
+            width={width}
+            height={height}
+          />
+        </View>
 
-      {/* Peliculas populares */}
-      <View
-        style={{
-          backgroundColor: 'red',
-          // height: 230,
-          top: (height / 2) * 1.05,
-        }}>
-        <Text style={{fontSize: 30, fontWeight: 'bold'}}>
-          Peliculas Populares
-        </Text>
-        <FlatList
-          data={peliculasEnCine}
-          renderItem={({item}) => <MoviePoster movie={item} />}></FlatList>
+        {/* Peliculas populares */}
+        <HorizontalSlider title="Populares" movies={popular} />
+        <HorizontalSlider title="Top Rated" movies={topPated} />
+        <HorizontalSlider title="Upcoming" movies={upcoming} />
       </View>
-    </View>
+    </ScrollView>
   );
 };

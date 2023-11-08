@@ -4,16 +4,27 @@ import {Movie} from '../interfaces/movieInteface';
 
 interface Props {
   movie: Movie;
+  height?: number;
+  width?: number;
+  posicion?: Position;
 }
 
-export const MoviePoster = ({movie}: Props) => {
+type Position = 'center' | 'flex-start';
+
+export const MoviePoster = ({
+  movie,
+  height = 420,
+  width = 300,
+  posicion = 'flex-start',
+}: Props) => {
   const uri = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
   return (
     <View
       style={{
-        width: 300,
-        alignSelf: 'center',
-        height: 420,
+        width,
+        alignSelf: posicion,
+        height,
+        marginHorizontal: 5,
       }}>
       <View style={styles.imageContainer}>
         <Image
