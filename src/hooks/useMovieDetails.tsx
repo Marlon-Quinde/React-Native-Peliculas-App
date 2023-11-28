@@ -37,5 +37,5 @@ export const useMovieDetails = (movieId: number) => {
     getMovieDetails();
   }, []);
 
-  return {state};
+  return {...state};
 };
