@@ -57,6 +57,7 @@ export const MovieDetails = ({movieFull, cast}: Props) => {
         style={{
           marginTop: 10,
           marginBottom: 100,
+          marginHorizontal: 10,
         }}>
         <Text
           style={{
@@ -70,8 +71,13 @@ export const MovieDetails = ({movieFull, cast}: Props) => {
         </Text>
         <FlatList
           data={cast}
+          keyExtractor={item => item.id.toString()}
           horizontal
           renderItem={({item}) => <CastItem actor={item} />}
+          style={{
+            marginTop: 10,
+            height: 70,
+          }}
         />
       </View>
     </>

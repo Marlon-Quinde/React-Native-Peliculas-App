@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'white',
+    height: 50,
 
     borderRadius: 10,
     shadowColor: '#000',
@@ -44,8 +45,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 8,
+    marginHorizontal: 15,
+    paddingRight: 15,
   },
   actorInfo: {
     marginLeft: 10,
+    marginTop: 3,
   },
 });

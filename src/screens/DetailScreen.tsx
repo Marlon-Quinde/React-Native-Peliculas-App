@@ -13,11 +13,12 @@ import {RootStackParams} from '../navigation/Navigation';
 import {useMovieDetails} from '../hooks/useMovieDetails';
 import {ActivityIndicator} from 'react-native';
 import {MovieDetails} from '../components/MovieDetails';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const {height} = Dimensions.get('screen');
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailScreen'> {}
-export const DetailScreen = ({route}: Props) => {
+export const DetailScreen = ({route, navigation}: Props) => {
   const movie = route.params;
 
   const {isLoading, cast, movieFull} = useMovieDetails(movie.id);
@@ -47,6 +48,13 @@ export const DetailScreen = ({route}: Props) => {
       ) : (
         <MovieDetails cast={cast} movieFull={movieFull!} />
       )}
+
+      {/* Boton para cerrar */}
+      <View style={styles.backButton}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
+          <Icon name="arrow-back-outline" size={60} color="white" />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -86,5 +94,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  backButton: {
+    position: 'absolute',
+    zIndex: 999,
+    elevation: 9,
+    top: 15,
+    left: 10,
+    backgroundColor: 'gray',
+    borderRadius: 50,
   },
 });
