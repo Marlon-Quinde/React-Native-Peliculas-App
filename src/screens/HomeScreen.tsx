@@ -2,17 +2,30 @@ import React from 'react';
 import {View, ActivityIndicator, Dimensions, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+
 import Carousel from 'react-native-reanimated-carousel';
 
 import {MoviePoster} from '../components/MoviePoster';
 import {useMovies} from '../hooks/useMovies';
 import {HorizontalSlider} from '../components/HorizontalSlider';
+import { GradientBackground } from '../components/GradientBackground';
+import { getColors } from 'react-native-image-colors';
 
 const {width, height} = Dimensions.get('window');
 
 export const HomeScreen = () => {
   const {isLoading, nowPlaying, popular, topPated, upcoming} = useMovies();
   const {top} = useSafeAreaInsets();
+
+  const getPosterColors = async (index: number) => {
+    const movie = nowPlaying[index];
+    const uri = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    const colors = await getColors(uri, {
+      key: uri
+    })
+
+    console.log(uri)
+  }
 
   if (isLoading) {
     return (
@@ -22,42 +35,45 @@ export const HomeScreen = () => {
     );
   }
   return (
-    <ScrollView>
-      <View style={{marginTop: top}}>
-        <View
-          style={{
-            flex: 1,
-            height: 440,
-            alignItems: 'center',
-          }}>
-          {/* Carruse principal */}
-          <Carousel
-            autoPlayInterval={3000}
-            style={
-              {
-                // backgroundColor: 'violet',
+    <GradientBackground >
+      <ScrollView>
+        <View style={{marginTop: top}}>
+          <View
+            style={{
+              flex: 1,
+              height: 440,
+              alignItems: 'center',
+            }}>
+            {/* Carruse principal */}
+            <Carousel
+              autoPlayInterval={3000}
+              style={
+                {
+                  // backgroundColor: 'violet',
+                }
               }
-            }
-            mode="parallax"
-            modeConfig={{
-              parallaxScrollingScale: 0.9,
-              parallaxScrollingOffset: 145,
-            }}
-            autoPlay
-            data={nowPlaying}
-            renderItem={({item}) => (
-              <MoviePoster movie={item} posicion="center" />
-            )}
-            width={width}
-            height={height}
-          />
-        </View>
+              mode="parallax"
+              modeConfig={{
+                parallaxScrollingScale: 0.9,
+                parallaxScrollingOffset: 145,
+              }}
+              autoPlay
+              data={nowPlaying}
+              renderItem={({item}) => (
+                <MoviePoster movie={item} posicion="center" />
+              )}
+              width={width}
+              height={height}
+              onSnapToItem={index => getPosterColors(index)}
+            />
+          </View>
 
-        {/* Peliculas populares */}
-        <HorizontalSlider title="Populares" movies={popular} />
-        <HorizontalSlider title="Top Rated" movies={topPated} />
-        <HorizontalSlider title="Upcoming" movies={upcoming} />
-      </View>
-    </ScrollView>
+          {/* Peliculas populares */}
+          <HorizontalSlider title="Populares" movies={popular} />
+          <HorizontalSlider title="Top Rated" movies={topPated} />
+          <HorizontalSlider title="Upcoming" movies={upcoming} />
+        </View>
+      </ScrollView>
+    </GradientBackground>
   );
 };
